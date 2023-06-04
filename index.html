@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <title>Calculator in Vue</title>
+  </head>
+  <body>
+    <div id="app">
+      <h1>{{ msg }}</h1>
+      <div class="display">{{ current || 0 }}</div>
+      <br />
+      <div class="row">
+        <button @click="clear">C</button>
+        <button @click="sign">+/-</button>
+        <button @click="percent">%</button>
+        <button @click="divide" class="operator">÷</button>
+      </div>
+      <div class="row">
+        <button @click="append('7')">7</button>
+        <button @click="append('8')">8</button>
+        <button @click="append('9')">9</button>
+        <button class="operator" @click="multiply">x</button>
+      </div>
+      <div class="row">
+        <button @click="append('4')">4</button>
+        <button @click="append('5')">5</button>
+        <button @click="append('6')">6</button>
+        <button class="operator" @click="minus">-</button>
+      </div>
+      <div class="row">
+        <button @click="append('1')">1</button>
+        <button @click="append('2')">2</button>
+        <button @click="append('3')">3</button>
+        <button class="operator" @click="add">+</button>
+      </div>
+      <div class="row">
+        <button class="zero" @click="append('0')">0</button>
+        <button @click="dot">.</button>
+        <button class="operator" @click="equal">=</button>
+      </div>
+    </div>
+    <script>
+      const app = Vue.createApp({
+        data() {
+          return {
+            msg: "This is my calculator app",
+            previous: null,
+            current: "",
+            addClicked: false,
+            operator: null,
+          };
+        },
+        methods: {
+          clear() {
+            this.current = "";
+          },
+          sign() {
+            this.current = -(this.current)
+          },
+          percent(){
+            this.current = this.current / 100
+          },
+          dot() {
+            if (!this.current.includes('.')) {
+              this.current = `${this.current}.`
+            }
+          },
+          append(number) {
+            if (this.addClicked === true) {
+              add(this.previous, this.current);
+              this.current = "";
+            }
+            this.current = `${this.current}${number}`;
+          },
+          add() {
+            this.operator = (a, b) => a + b;
+            this.previous = this.current;
+            this.current = "";
+            this.operatorClicked = true;
+          },
+          divide() {
+            this.operator = (a, b) => a/b;
+            this.previous = this.current;
+            this.current = "";
+            this.operatorClicked = true;
+          },
+          multiply() {
+            this.operator = (a, b) => a * b;
+            this.previous = this.current;
+            this.current = "";
+            this.operatorClicked = true;
+          },
+          minus() {
+            this.operator = (a, b) => a - b;
+            this.previous = this.current;
+            this.current = "";
+          },
+          equal() {
+            this.current = `${this.operator(
+              Number(this.previous),
+              Number(this.current)
+            )}`;
+          },
+        },
+      }).mount("#app");
+    </script>
+    <style>
+      body {
+        /* background-color: red; */
+        display: flex;
+        justify-content: center;
+      }
+      /* #app {
+        background-color: blue;
+      } */
+      .display {
+        background-color: black;
+        color: white;
+        padding: 15px 25px;
+        font-weight: 700;
+        font-size: 30px;
+        border-radius: 5px;
+      }
+      button {
+        margin: 5px;
+        padding: 15px 25px;
+        flex: 1;
+        font-weight: 700;
+        font-size: 20px;
+        background-color: rgb(230, 227, 227);
+        border-radius: 5px;
+        border: none;
+      }
+      button:hover {
+        background-color: rgb(218, 214, 214);
+      }
+      .row {
+        display: flex;
+        justify-content: center;
+      }
+      .zero {
+        flex: 3.5;
+      }
+      .operator {
+        background-color: rgb(253, 166, 5);
+        color: white;
+      }
+      .operator:hover {
+        background-color: rgb(222, 146, 5);
+      }
+    </style>
+  </body>
+</html>
